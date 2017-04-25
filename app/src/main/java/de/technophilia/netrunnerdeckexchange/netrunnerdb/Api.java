@@ -1,7 +1,11 @@
 package de.technophilia.netrunnerdeckexchange.netrunnerdb;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
+import android.util.Log;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,22 +17,19 @@ import cz.msebera.android.httpclient.Header;
  */
 
 public class Api {
-    public void getPublicTimeline() {
-        RestClient.get("statuses/public_timeline.json", null, new JsonHttpResponseHandler() {
+    private static final String TAG = "NDB-API";
+    private static final String GET_DECK = "public/decklist/";
+
+    public void loadDeck(int deckId) {
+        RestClient.get(GET_DECK + deckId, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                // If the response is JSONObject instead of expected JSONArray
+                EventBus.getDefault().post(DeckFactory.buildDeck(response));
             }
 
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray timeline) {
-                //TODO: use the netrunnerdb api
-//                // Pull out the first event on the public timeline
-//                JSONObject firstEvent = timeline.get(0);
-//                String tweetText = firstEvent.getString("text");
-//
-//                // Do something with the response
-//                System.out.println(tweetText);
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d(TAG, throwable.toString());
             }
         });
     }
