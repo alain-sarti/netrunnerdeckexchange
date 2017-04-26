@@ -12,7 +12,7 @@ public class Card {
     String factionCode;
     String title;
 
-    Card(String url, String factionCode, String title) {
+    public Card(String url, String factionCode, String title) {
         this.factionCode = factionCode;
         this.title = title;
         try {

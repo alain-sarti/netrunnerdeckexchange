@@ -16,8 +16,4 @@ public class DeckEvent {
     public Deck getDeck() {
         return deck;
     }
-
-    public void setDeck(Deck deck) {
-        this.deck = deck;
-    }
 }
